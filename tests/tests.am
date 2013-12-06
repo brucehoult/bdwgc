@@ -45,6 +45,11 @@ check_PROGRAMS += realloc_test
 realloc_test_SOURCES = tests/realloc_test.c
 realloc_test_LDADD = $(test_ldadd)
 
+TESTS += get_alloc_fn_test$(EXEEXT)
+check_PROGRAMS += get_alloc_fn_test
+get_alloc_fn_test_SOURCES = tests/get_alloc_fn_test.c
+get_alloc_fn_test_LDADD = $(test_ldadd)
+
 TESTS += staticrootstest$(EXEEXT)
 check_PROGRAMS += staticrootstest
 staticrootstest_SOURCES = tests/staticrootstest.c

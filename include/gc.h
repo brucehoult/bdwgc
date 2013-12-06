@@ -474,6 +474,16 @@ GC_API int GC_CALL GC_is_heap_ptr(const void *);
 /* requested.                                                           */
 GC_API size_t GC_CALL GC_size(const void * /* obj_addr */) GC_ATTR_NONNULL(1);
 
+/* Given a pointer to the base of an object, return the function used   */
+/* to allocate the same kind of object (normal/atomic/uncollectable)    */
+/* Optionally return the size. Pass 0 if you don't want the size.       */
+typedef void * (* GC_alloc_func)(size_t /* bytes_requested */);
+GC_API GC_alloc_func GC_CALL
+        GC_alloc_fn_and_size(const void * /* obj_addr */,
+                             size_t * /* ptr to returned size in bytes */)
+                             GC_ATTR_NONNULL(1);
+
+
 /* For compatibility with C library.  This is occasionally faster than  */
 /* a malloc followed by a bcopy.  But if you rely on that, either here  */
 /* or with the standard C library, your code is broken.  In my          */

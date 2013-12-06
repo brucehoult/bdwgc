@@ -483,6 +483,34 @@ GC_API size_t GC_CALL GC_size(const void * p)
 }
 
 
+/* Return the function used to allocate an object, given a pointer to */
+/* its base. Optionally return the size as well. */
+GC_API GC_alloc_func GC_CALL
+GC_alloc_fn_and_size(const void * p, size_t * sz)
+{
+    hdr * hhdr = HDR(p);
+    if (sz) *sz = hhdr -> hb_sz;
+
+    switch(hhdr -> hb_obj_kind) {
+#     ifdef STUBBORN_ALLOC
+        case STUBBORN:
+            return(GC_malloc_stubborn);
+#     endif
+        case PTRFREE:
+            return(GC_malloc_atomic);
+        case UNCOLLECTABLE:
+            return(GC_malloc_uncollectable);
+#       ifdef ATOMIC_UNCOLLECTABLE
+          case AUNCOLLECTABLE:
+            return(GC_malloc_atomic_uncollectable);
+#       endif /* ATOMIC_UNCOLLECTABLE */
+        default:
+            return(GC_malloc);
+    }
+}
+
+
+
 /* These getters remain unsynchronized for compatibility (since some    */
 /* clients could call some of them from a GC callback holding the       */
 /* allocator lock).                                                     */
